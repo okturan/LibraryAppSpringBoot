@@ -1,6 +1,5 @@
 package com.alisimsek.LibraryManagementProject.service;
 
-
 import com.alisimsek.LibraryManagementProject.dto.response.PublisherResponse;
 import com.alisimsek.LibraryManagementProject.entity.Publisher;
 import com.alisimsek.LibraryManagementProject.mapper.PublisherMapper;
@@ -23,7 +22,7 @@ public class PublisherService {
     }
 
     public PublisherResponse getById(Long id) {
-        Publisher p = publisherRepository.findById(id).orElseThrow(() -> new RuntimeException(id + "id li Yayın Evi Bulunamadı !!!"));
+        Publisher p = publisherRepository.findById(id).orElseThrow(() -> new RuntimeException(id + " id li Yayın Evi Bulunamadı !!!"));
         return publisherMapper.asOutput(p);
     }
 
@@ -41,10 +40,10 @@ public class PublisherService {
 
         Optional<Publisher> publisherFromDb = publisherRepository.findById(id);
 
-        Optional<Publisher> isPublisherExist = publisherRepository.findByNameAndEstablishmentYear(request.getName(), request.getEstablishmentYear());
+        Optional<Publisher> isPublisherExist = publisherRepository.findByNameAndEstablishmentYearAndIdNot(request.getName(), request.getEstablishmentYear(), id);
 
         if (publisherFromDb.isEmpty()) {
-            throw new RuntimeException(id + "Güncellemeye çalıştığınız yayın evi sistemde bulunamadı. !!!.");
+            throw new RuntimeException(id + " id li Yayın Evi sistemde bulunamadı !!!");
         }
 
         if (isPublisherExist.isPresent()) {
@@ -60,7 +59,7 @@ public class PublisherService {
         if (publisherFromDb.isPresent()) {
             publisherRepository.delete(publisherFromDb.get());
         } else {
-            throw new RuntimeException(id + "id li Yayın Evi sistemde bulunamadı !!!");
+            throw new RuntimeException(id + " id li Yayın Evi sistemde bulunamadı !!!");
         }
     }
 }
