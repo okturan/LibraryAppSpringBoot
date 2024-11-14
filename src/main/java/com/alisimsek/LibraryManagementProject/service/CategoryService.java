@@ -37,7 +37,7 @@ public class CategoryService {
 
         Optional<Category> categoryFromDb = categoryRepository.findById(id);
 
-        Optional<Category> isCategoryExist = categoryRepository.findByName(request.getName());
+        Optional<Category> isCategoryExist = categoryRepository.findByNameAndIdNot(request.getName(), id);
 
         if (categoryFromDb.isEmpty()) {
             throw new RuntimeException(id + "Güncellemeye çalıştığınız kategori sistemde bulunamadı. !!!.");
