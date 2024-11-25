@@ -1,6 +1,5 @@
 package com.alisimsek.LibraryManagementProject.service;
 
-
 import com.alisimsek.LibraryManagementProject.entity.Book;
 import com.alisimsek.LibraryManagementProject.entity.Category;
 import com.alisimsek.LibraryManagementProject.repository.CategoryRepository;
@@ -34,9 +33,7 @@ public class CategoryService {
     }
 
     public Category update(Long id, Category request) {
-
         Optional<Category> categoryFromDb = categoryRepository.findById(id);
-
         Optional<Category> isCategoryExist = categoryRepository.findByNameAndIdNot(request.getName(), id);
 
         if (categoryFromDb.isEmpty()) {
@@ -52,15 +49,16 @@ public class CategoryService {
 
     public String deleteById(Long id) {
         Optional<Category> categoryFromDb = categoryRepository.findById(id);
-        List<Book> booksInCategory = bookService.findByCategoryId(id);
-
-        if (!categoryFromDb.isPresent()) {
-            return id + " id li Kategori sistemde bulunamadı!!!";
-        } else if (!booksInCategory.isEmpty()) {
-            return id + " id li Kategoriye ait sistemde kayıtlı kitap mevcut! Silme işlemi yapılamadı.";
-        } else {
-            categoryRepository.delete(categoryFromDb.get());
-            return "Kategori silme işlemi başarılı";
+        if (categoryFromDb.isEmpty()) {
+            throw new RuntimeException(id + " id li Kategori sistemde bulunamadı!!!");
         }
+        
+        List<Book> booksInCategory = bookService.findByCategoryId(id);
+        if (!booksInCategory.isEmpty()) {
+            throw new RuntimeException(id + " id li Kategoriye ait sistemde kayıtlı kitap mevcut! Silme işlemi yapılamadı.");
+        }
+        
+        categoryRepository.delete(categoryFromDb.get());
+        return "Kategori silme işlemi başarılı";
     }
 }
