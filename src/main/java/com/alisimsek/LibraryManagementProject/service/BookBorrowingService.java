@@ -1,6 +1,5 @@
 package com.alisimsek.LibraryManagementProject.service;
 
-
 import com.alisimsek.LibraryManagementProject.dto.request.BookBorrowingRequest;
 import com.alisimsek.LibraryManagementProject.dto.request.BookBorrowingUpdateRequest;
 import com.alisimsek.LibraryManagementProject.entity.Book;
@@ -27,14 +26,12 @@ public class BookBorrowingService {
     }
 
     public BookBorrowing getById(Long id) {
-        return bookBorrowingRepository.findById(id).orElseThrow(() -> new RuntimeException(id + "id li Ödünç Alımı Bulunamadı !!!"));
+        return bookBorrowingRepository.findById(id).orElseThrow(() -> new RuntimeException("Book borrowing record with ID " + id + " not found in the system."));
     }
 
-
     public BookBorrowing create(BookBorrowingRequest bookBorrowingRequest) {
-
         if (bookBorrowingRequest.getBookForBorrowingRequest().getStock() < 0) {
-            throw new RuntimeException("Ödünç almak istediğiniz kitabın stoğu yoktur !!!");
+            throw new RuntimeException("The book you want to borrow is out of stock.");
         }
 
         Book book = bookService.getById(bookBorrowingRequest.getBookForBorrowingRequest().getId());
@@ -51,13 +48,13 @@ public class BookBorrowingService {
     }
 
     public BookBorrowing update(Long id, BookBorrowingUpdateRequest bookBorrowingUpdateRequest) {
-
         Optional<BookBorrowing> bookBorrowingFromDb = bookBorrowingRepository.findById(id);
         LocalDate returnDateFromDb = bookBorrowingFromDb.get().getReturnDate();
         System.out.println("returnDateFromDb :" + returnDateFromDb);
         System.out.println("bookBorrowingUpdateRequest.getReturnDate : " + bookBorrowingUpdateRequest.getReturnDate());
+        
         if (bookBorrowingFromDb.isEmpty()) {
-            throw new RuntimeException(id + "Güncellemeye çalıştığınız ödünç alım sistemde bulunamadı!!!.");
+            throw new RuntimeException("The book borrowing record you are trying to update could not be found in the system.");
         }
 
         if (bookBorrowingUpdateRequest.getReturnDate() != null && returnDateFromDb == null)  {
@@ -66,8 +63,8 @@ public class BookBorrowingService {
             book.setStock(book.getStock() + 1);
 
             Book bookUpdated = bookService.update(book.getId(), book);
-
         }
+        
         BookBorrowing bookBorrowing = bookBorrowingFromDb.get();
         bookBorrowingMapper.update(bookBorrowing, bookBorrowingUpdateRequest);
         return bookBorrowingRepository.save(bookBorrowing);
@@ -84,11 +81,8 @@ public class BookBorrowingService {
                 bookBorrowing.setBook(bookUpdated);
             }
             bookBorrowingRepository.delete(bookBorrowing);
-
         } else {
-            throw new RuntimeException(id + "id li Ödünç Alımı sistemde bulunamadı !!!");
+            throw new RuntimeException("Book borrowing record with ID " + id + " not found in the system.");
         }
     }
-
-
 }

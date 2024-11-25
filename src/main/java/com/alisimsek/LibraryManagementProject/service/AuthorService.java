@@ -23,7 +23,7 @@ public class AuthorService {
     }
 
     public AuthorResponse getById(Long id) {
-        return authorMapper.asOutput(authorRepository.findById(id).orElseThrow(() -> new RuntimeException(id + "id li Yazar Bulunamadı !!!")));
+        return authorMapper.asOutput(authorRepository.findById(id).orElseThrow(() -> new RuntimeException("Author with ID " + id + " not found in the system.")));
     }
 
     public AuthorResponse create(AuthorRequest request) {
@@ -33,21 +33,20 @@ public class AuthorService {
             Author authorSaved = authorRepository.save(authorMapper.asEntity(request));
             return authorMapper.asOutput(authorSaved);
         }
-        throw new RuntimeException("Bu yazar daha önce sisteme kayıt olmuştur !!!");
+        throw new RuntimeException("An author with these details already exists in the system.");
     }
 
     public AuthorResponse update(Long id, AuthorRequest request) {
-
         Optional<Author> authorFromDb = authorRepository.findById(id);
 
         Optional<Author> isAuthorExist = authorRepository.findByNameAndBirthDateAndCountry(request.getName(), request.getBirthDate(), request.getCountry());
 
         if (authorFromDb.isEmpty()) {
-            throw new RuntimeException(id + "Güncellemeye çalıştığınız yazar sistemde bulunamadı. !!!.");
+            throw new RuntimeException("The author you are trying to update could not be found in the system.");
         }
 
         if (isAuthorExist.isPresent()) {
-            throw new RuntimeException("Bu yazar daha önce sisteme kayıt olmuştur !!!");
+            throw new RuntimeException("An author with these details already exists in the system.");
         }
         Author author = authorFromDb.get();
         authorMapper.update(author, request);
@@ -59,9 +58,7 @@ public class AuthorService {
         if (authorFromDb.isPresent()) {
             authorRepository.delete(authorFromDb.get());
         } else {
-            throw new RuntimeException(id + "id li Yazar sistemde bulunamadı !!!");
+            throw new RuntimeException("Author with ID " + id + " not found in the system.");
         }
     }
-
-
 }

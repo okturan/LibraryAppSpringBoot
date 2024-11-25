@@ -22,32 +22,30 @@ public class PublisherService {
     }
 
     public PublisherResponse getById(Long id) {
-        Publisher p = publisherRepository.findById(id).orElseThrow(() -> new RuntimeException(id + " id li Yayın Evi Bulunamadı !!!"));
+        Publisher p = publisherRepository.findById(id).orElseThrow(() -> new RuntimeException("Publisher with ID " + id + " not found in the system."));
         return publisherMapper.asOutput(p);
     }
 
     public Publisher create(Publisher request) {
-
         Optional<Publisher> isPublisherExist = publisherRepository.findByNameAndEstablishmentYear(request.getName(), request.getEstablishmentYear());
 
         if (isPublisherExist.isEmpty()) {
             return publisherRepository.save(request);
         }
-        throw new RuntimeException("Bu yayın evi daha önce sisteme kayıt olmuştur !!!");
+        throw new RuntimeException("A publisher with these details already exists in the system.");
     }
 
     public Publisher update(Long id, Publisher request) {
-
         Optional<Publisher> publisherFromDb = publisherRepository.findById(id);
 
         Optional<Publisher> isPublisherExist = publisherRepository.findByNameAndEstablishmentYearAndIdNot(request.getName(), request.getEstablishmentYear(), id);
 
         if (publisherFromDb.isEmpty()) {
-            throw new RuntimeException(id + " id li Yayın Evi sistemde bulunamadı !!!");
+            throw new RuntimeException("The publisher you are trying to update could not be found in the system.");
         }
 
         if (isPublisherExist.isPresent()) {
-            throw new RuntimeException("Bu yayın evi daha önce sisteme kayıt olmuştur !!!");
+            throw new RuntimeException("A publisher with these details already exists in the system.");
         }
 
         request.setId(id);
@@ -59,7 +57,7 @@ public class PublisherService {
         if (publisherFromDb.isPresent()) {
             publisherRepository.delete(publisherFromDb.get());
         } else {
-            throw new RuntimeException(id + " id li Yayın Evi sistemde bulunamadı !!!");
+            throw new RuntimeException("Publisher with ID " + id + " not found in the system.");
         }
     }
 }

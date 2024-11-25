@@ -9,5 +9,8 @@ import java.util.Optional;
 @Repository
 public interface PublisherRepository extends JpaRepository<Publisher, Long> {
     Optional<Publisher> findByNameAndEstablishmentYear(String name, Integer year);
+
     Optional<Publisher> findByNameAndEstablishmentYearAndIdNot(String name, Integer year, Long id);
+
+    Optional<Publisher> findByName(String name);
 }

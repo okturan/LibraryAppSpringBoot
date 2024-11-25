@@ -1,6 +1,5 @@
 package com.alisimsek.LibraryManagementProject.service;
 
-
 import com.alisimsek.LibraryManagementProject.entity.Book;
 import com.alisimsek.LibraryManagementProject.repository.BookRepository;
 import jakarta.transaction.Transactional;
@@ -21,7 +20,7 @@ public class BookService {
     }
 
     public Book getById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new RuntimeException(id + "id li Kitap Bulunamadı !!!"));
+        return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book with ID " + id + " not found in the system."));
     }
 
     @Transactional
@@ -31,15 +30,14 @@ public class BookService {
         if (isBookExist.isEmpty()) {
             return this.bookRepository.save(book);
         }
-        throw new RuntimeException("Bu kitap daha önce sisteme kayıt olmuştur !!!");
+        throw new RuntimeException("A book with this name and author already exists in the system.");
     }
 
     public Book update(Long id, Book book) {
-
         Optional<Book> bookFromDb = bookRepository.findById(id);
 
         if (bookFromDb.isEmpty()) {
-            throw new RuntimeException(id + "Güncellemeye çalıştığınız kitap sistemde bulunamadı. !!!.");
+            throw new RuntimeException("The book you are trying to update with ID " + id + " could not be found in the system.");
         }
 
         book.setId(id);
@@ -51,7 +49,7 @@ public class BookService {
         if (bookFromDb.isPresent()) {
             bookRepository.delete(bookFromDb.get());
         } else {
-            throw new RuntimeException(id + "id li Kitap sistemde bulunamadı !!!");
+            throw new RuntimeException("Book with ID " + id + " not found in the system.");
         }
     }
 
@@ -59,4 +57,3 @@ public class BookService {
         return bookRepository.findByCategoryId(id);
     }
 }
-
