@@ -62,7 +62,7 @@ public class BookBorrowingService {
             Book book = bookBorrowingFromDb.get().getBook();
             book.setStock(book.getStock() + 1);
 
-            Book bookUpdated = bookService.update(book.getId(), book);
+
         }
         
         BookBorrowing bookBorrowing = bookBorrowingFromDb.get();
