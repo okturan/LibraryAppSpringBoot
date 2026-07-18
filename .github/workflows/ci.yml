@@ -52,6 +52,11 @@ jobs:
       - name: Test and package
         run: ./mvnw --batch-mode --no-transfer-progress verify
 
+      - name: Validate API proof asset
+        run: |
+          test -s docs/library-api-error-proof.png
+          file docs/library-api-error-proof.png | grep -q "PNG image data, 1280 x 720"
+
       - name: Validate Compose contract
         run: docker compose --env-file .env.example config --quiet
 
