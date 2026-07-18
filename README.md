@@ -2,7 +2,7 @@
 
 Kütüphaneler tarafından kullanılabilecek kayıt yönetimlerini, kitap ödünç verme ve alma işlemlerini yapabilecekleri Rest API projesidir.
 
-> **Fork durumu:** Bu depo, [gorbadil/LibraryAppSpringBoot](https://github.com/gorbadil/LibraryAppSpringBoot) projesinin fork'udur; özgün projenin tamamı Okan'a aitmiş gibi sunulmaz. [Okan'ın upstream'den sonraki 10 commit'i](https://github.com/gorbadil/LibraryAppSpringBoot/compare/main...okturan:main) örnek veri yükleme, global hata yönetimi, repository/service düzeltmeleri, tek alanlı kategori ve yayınevi güncelleme hataları, silme hataları, Docker veri davranışı ve kurulum dokümantasyonu üzerinde çalışır.
+> **Fork durumu:** Bu depo, [gorbadil/LibraryAppSpringBoot](https://github.com/gorbadil/LibraryAppSpringBoot) projesinin fork'udur; özgün projenin tamamı Okan'a aitmiş gibi sunulmaz. [Okan'ın upstream'den sonraki commit farkı](https://github.com/gorbadil/LibraryAppSpringBoot/compare/main...okturan:main) örnek veri yükleme, global hata yönetimi, repository/service düzeltmeleri, tek alanlı kategori ve yayınevi güncelleme hataları, silme hataları, Docker veri davranışı, doğrulanmış API kanıtı ve kurulum dokümantasyonu üzerinde çalışır.
 
 ## Okan Tarafından Eklenen Farklar
 
