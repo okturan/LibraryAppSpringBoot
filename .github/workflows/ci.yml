@@ -55,7 +55,14 @@ jobs:
       - name: Validate API proof asset
         run: |
           test -s docs/library-api-error-proof.png
-          file docs/library-api-error-proof.png | grep -q "PNG image data, 1280 x 720"
+          python3 - <<'PY'
+          import struct
+          from pathlib import Path
+
+          proof = Path("docs/library-api-error-proof.png").read_bytes()
+          assert proof[:8] == b"\x89PNG\r\n\x1a\n", "proof asset is not a PNG"
+          assert struct.unpack(">II", proof[16:24]) == (1280, 720), "proof asset must be 1280x720"
+          PY
 
       - name: Validate Compose contract
         run: docker compose --env-file .env.example config --quiet
