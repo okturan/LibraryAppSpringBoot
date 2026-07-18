@@ -2,6 +2,17 @@
 
 Kütüphaneler tarafından kullanılabilecek kayıt yönetimlerini, kitap ödünç verme ve alma işlemlerini yapabilecekleri Rest API projesidir.
 
+> **Fork durumu:** Bu depo, [gorbadil/LibraryAppSpringBoot](https://github.com/gorbadil/LibraryAppSpringBoot) projesinin fork'udur; özgün projenin tamamı Okan'a aitmiş gibi sunulmaz. [Okan'ın upstream'den sonraki 10 commit'i](https://github.com/gorbadil/LibraryAppSpringBoot/compare/main...okturan:main) örnek veri yükleme, global hata yönetimi, repository/service düzeltmeleri, tek alanlı kategori ve yayınevi güncelleme hataları, silme hataları, Docker veri davranışı ve kurulum dokümantasyonu üzerinde çalışır.
+
+## Okan Tarafından Eklenen Farklar
+
+- Tekrarlanabilir örnek kütüphane verisi üreten `DataLoader`.
+- API hatalarını tutarlı yanıtlara dönüştüren global exception handler.
+- Yalnız adres/açıklama alanı değiştiğinde başarısız olan yayınevi ve kategori güncellemelerinin düzeltilmesi.
+- Silme hatalarının ve repository sorgularının iyileştirilmesi.
+- Java 17'ye sabitlenmiş container build/runtime aşamaları ve PostgreSQL servis sağlık kontrolü.
+- Kaynakta parola tutmayan Compose yapılandırması ve Java 17/PostgreSQL CI doğrulaması.
+
 ## Kullanılan Teknolojiler
 
 <code><img width="50" src="https://user-images.githubusercontent.com/25181517/117201156-9a724800-adec-11eb-9a9d-3cd0f67da4bc.png" alt="Java" title="Java"/></code>
@@ -72,19 +83,25 @@ Aşağıda, API'nin sunduğu temel endpoint'lerin bir listesi bulunmaktadır:
 1. Projeyi klonlayın.
     - `git clone https://github.com/okturan/LibraryAppSpringBoot.git`
 2. Docker yüklü ise,
-    1. `docker-compose up`
-    2. `src/main/resources/application.properties` dosyasında veri tabanı konfigürasyonunu yapın.
-3. Projeyi ayağa kaldırmak için IDE'nizden start edin.
+    1. `cp .env.example .env`
+    2. `.env` içindeki yerel veritabanı kullanıcı adı ve parolasını değiştirin.
+    3. `docker compose up --build`
+3. Docker olmadan çalıştırmak için aşağıdaki ortam değişkenlerini tanımlayıp `./mvnw spring-boot:run` komutunu kullanın.
 4. Swagger üzerinden API kullanılabilir. Tarayıcınızdan [http://localhost:8080/swagger-ui/index.html#/](http://localhost:8080/swagger-ui/index.html#/)'e gidin.
 5. End pointlere istek atabilirsiniz.
 
 ## Ortam Değişkenleri
 
-Bu projeyi çalıştırmak için aşağıdaki ortam değişkenlerini application.properties dosyasından değiştirmelisiniz.
+Bu projeyi çalıştırmak için aşağıdaki ortam değişkenlerini tanımlayın; gerçek kimlik bilgilerini `application.properties`, `.env.example` veya Git geçmişine yazmayın.
 
-spring.datasource.url  
-spring.datasource.username  
-spring.datasource.password
+- `DBURL` — ör. `localhost:5432`
+- `DBNAME` — ör. `library-app`
+- `DBUSERNAME`
+- `DBPASSWORD`
+
+## Doğrulama
+
+GitHub Actions, PostgreSQL servis konteyneri üzerinde Java 17 ile Maven testlerini ve paketlemeyi çalıştırır; ardından Compose yapılandırmasının örnek ortam dosyasıyla çözümlendiğini ve uygulama container'ının Java 17 tabanında üretildiğini doğrular. Bu bir fork olduğundan, doğrulama Okan'ın farkını kanıtlar; upstream kaynakların yazarlığını değiştirmez.
 
 ## Lisans
 
