@@ -6,18 +6,23 @@ services:
     depends_on:
       - postgres
     environment:
-      DBURL: postgres:5432
-      DBNAME: library-app
-      DBUSERNAME: postgres
-      DBPASSWORD: postgres
+      DBURL: ${DBURL:-postgres:5432}
+      DBNAME: ${DBNAME:-library-app}
+      DBUSERNAME: ${DBUSERNAME:?set DBUSERNAME in .env}
+      DBPASSWORD: ${DBPASSWORD:?set DBPASSWORD in .env}
 
   postgres:
-    image: postgres
+    image: postgres:16-alpine
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: library-app
+      POSTGRES_USER: ${DBUSERNAME:?set DBUSERNAME in .env}
+      POSTGRES_PASSWORD: ${DBPASSWORD:?set DBPASSWORD in .env}
+      POSTGRES_DB: ${DBNAME:-library-app}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     volumes:
       - /var/lib/postgresql/data
