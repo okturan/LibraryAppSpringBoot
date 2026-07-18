@@ -13,6 +13,12 @@ Kütüphaneler tarafından kullanılabilecek kayıt yönetimlerini, kitap ödün
 - Java 17'ye sabitlenmiş container build/runtime aşamaları ve PostgreSQL servis sağlık kontrolü.
 - Kaynakta parola tutmayan Compose yapılandırması ve Java 17/PostgreSQL CI doğrulaması.
 
+## Canlı API Kanıtı
+
+![Swagger UI'da var olmayan kategori isteğinin global hata yönetimiyle 404 dönmesi](docs/library-api-error-proof.jpg)
+
+*Gerçek Java 17/PostgreSQL 16 container çalıştırmasından alınmıştır. Swagger UI, `DataLoader` tarafından üretilen sentetik yerel veriler üzerinde `GET /api/v1/categories/999999` isteğini çalıştırır; fork'ta eklenen global hata yönetimi de tam 404 yanıtını üretir. Bu, barındırılan bir demo değil, yerel ve tekrar üretilebilir bir çalışma kanıtıdır.*
+
 ## Kullanılan Teknolojiler
 
 <code><img width="50" src="https://user-images.githubusercontent.com/25181517/117201156-9a724800-adec-11eb-9a9d-3cd0f67da4bc.png" alt="Java" title="Java"/></code>
